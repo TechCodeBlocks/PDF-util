@@ -29,6 +29,11 @@ public class PDFutil {
        basePath = console.readLine("Enter the root folder you wish to use: ");
        apiKey = console.readLine("Enter a valid ConvertAPI key: ");
        finalDestinationFileName = console.readLine("Please enter the desired name for your final document: ");
+       System.out.println("Processing and converting documents (this will take a while)....");
+       crawlFiles(new File(basePath));
+        System.out.println("Merging into one file (this may take a while)....");
+       mergePDFs();
+       System.out.println("Your merged PDF is created. It is called " + finalDestinationFileName + " in your root folder");
 
 
         //create a new PDF document at the base path

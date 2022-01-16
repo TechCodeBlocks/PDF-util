@@ -37,6 +37,33 @@
                     </archive>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <!--suppress MavenModelInspection -->
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                            <finalName>pdftool</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <archive>
+                                <manifest>
+                                    <mainClass>
+                                        ch.admin.wbf.isceco.lw.Main
+                                    </mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
