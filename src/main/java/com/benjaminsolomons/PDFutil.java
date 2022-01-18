@@ -26,19 +26,22 @@ public class PDFutil {
     static String apiKey;
 
     public static void main(String[] args) {
+        System.out.println("PDF-Util Version 1. © 2022 Benjamin Solomons");
        Console console = System.console();
-//       basePath = console.readLine("Enter the root folder you wish to use: ");
-//       apiKey = console.readLine("Enter a valid ConvertAPI key: ");
-//       finalDestinationFileName = console.readLine("Please enter the desired name for your final document: ");
-        basePath = "/Users/rerolfe/Documents/OLD_Work_Backup/Work";
-        apiKey = "A7yYTdLcZwOdMIRh";
-        finalDestinationFileName = "MergedPDF";
-        Config.setDefaultSecret(apiKey);
+       basePath = console.readLine("Enter the root folder you wish to use: ");
+       apiKey = console.readLine("Enter a valid ConvertAPI key: ");
+       finalDestinationFileName = console.readLine("Please enter the desired name for your final document: ");
+//        basePath = "/Users/rerolfe/Documents/OLD_Work_Backup/Work";
+//        apiKey = "A7yYTdLcZwOdMIRh";
+//        finalDestinationFileName = "MergedPDF";
+     Config.setDefaultSecret(apiKey);
        System.out.println("Processing and converting documents (this will take a while)....");
        crawlFiles(new File(basePath));
         System.out.println("Merging into one file (this may take a while)....");
        mergePDFs();
-       System.out.println("Your merged PDF is created. It is called " + finalDestinationFileName + " in your root folder");
+        System.out.println("Cleaning up temporary PDFS that the program created....");
+        cleanup();
+       System.out.println("Your merged PDF is created. It is called " + finalDestinationFileName + " in the folder above root folder");
 
 
         //create a new PDF document at the base path
@@ -60,7 +63,6 @@ public class PDFutil {
                     //ml: merge logic. File is already a pdf. Merge it with the main one.
 //                   System.out.println(file.getName().split("\\.").length);
                     if (fileDetails.length > 0) {
-                        System.out.println(String.valueOf(fileDetails[fileDetails.length - 1]));
                         switch (fileDetails[fileDetails.length - 1]) {
                             case "docx":
                                 convertToPDF("docx", file.getPath());
@@ -139,6 +141,7 @@ public class PDFutil {
                 cs.drawImage(pdImageXObject, 20,20, pdImageXObject.getWidth() * scale,pdImageXObject.getHeight()*scale );
             }
             document.save(path+".pdf");
+            document.close();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -156,6 +159,13 @@ public class PDFutil {
             mergerUtility.mergeDocuments(null);
         }catch (Exception e){
             e.printStackTrace();
+        }
+    }
+    private static void cleanup(){
+        for(File file: pdfsToMerge){
+            if(file.getName().split("\\.").length > 2){
+                file.delete();
+            }
         }
     }
 
