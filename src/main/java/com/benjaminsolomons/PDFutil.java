@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -28,10 +29,10 @@ public class PDFutil {
     public static void main(String[] args) {
         System.out.println("PDF-Util Version 1. © 2022 Benjamin Solomons");
        Console console = System.console();
-       basePath = console.readLine("Enter the root folder you wish to use: ");
+       basePath = console.readLine("Enter the root folder you wish to use: ").replace("'","");
        apiKey = console.readLine("Enter a valid ConvertAPI key: ");
        finalDestinationFileName = console.readLine("Please enter the desired name for your final document: ");
-//        basePath = "/Users/rerolfe/Documents/OLD_Work_Backup/Work";
+//        basePath = "/home/benjaminsolomons/Documents/TestingStupidProgram";
 //        apiKey = "A7yYTdLcZwOdMIRh";
 //        finalDestinationFileName = "MergedPDF";
      Config.setDefaultSecret(apiKey);
@@ -51,9 +52,11 @@ public class PDFutil {
 
     private static void crawlFiles(File directory){
         File[] files = directory.listFiles();
+        Arrays.sort(files);
         if(files != null){
             for(File file: files){
                 if(file.isDirectory()){
+                    System.out.println(file.getPath());
                     crawlFiles(file);
                 }else {
                     String[] fileDetails = file.getName().split("\\.");
@@ -63,48 +66,59 @@ public class PDFutil {
                     //ml: merge logic. File is already a pdf. Merge it with the main one.
 //                   System.out.println(file.getName().split("\\.").length);
                     if (fileDetails.length > 0) {
+                        System.out.println(file.getPath());
                         switch (fileDetails[fileDetails.length - 1]) {
                             case "docx":
-                                convertToPDF("docx", file.getPath());
                                 pdfsToMerge.add(new File(file.getPath() + ".pdf"));
+                                convertToPDF("docx", file.getPath());
+
                                 break;
                             case "doc":
-                                convertToPDF("doc", file.getPath());
                                 pdfsToMerge.add(new File(file.getPath() + ".pdf"));
+                                convertToPDF("doc", file.getPath());
+
                                 break;
                             case "pptx":
-                                convertToPDF("pptx", file.getPath());
                                 pdfsToMerge.add(new File(file.getPath() + ".pdf"));
+                                convertToPDF("pptx", file.getPath());
+
                                 break;
                             case "ppt":
-                                convertToPDF("ppt", file.getPath());
                                 pdfsToMerge.add(new File(file.getPath() + ".pdf"));
+                                convertToPDF("ppt", file.getPath());
+
                                 break;
                             case "xlsx":
-                                convertToPDF("xlsx", file.getPath());
                                 pdfsToMerge.add(new File(file.getPath() + ".pdf"));
+                                convertToPDF("xlsx", file.getPath());
+
                                 break;
                             case "xls":
-                                convertToPDF("xls", file.getPath());
                                 pdfsToMerge.add(new File(file.getPath() + ".pdf"));
+                                convertToPDF("xls", file.getPath());
+
                                 break;
                             case "pages":
-                                convertToPDF("pages", file.getPath());
                                 pdfsToMerge.add(new File(file.getPath() + ".pdf"));
+                                convertToPDF("pages", file.getPath());
+
                                 break;
                             case "key":
-                                convertToPDF("key", file.getPath());
                                 pdfsToMerge.add(new File(file.getPath() + ".pdf"));
+                                convertToPDF("key", file.getPath());
+
                                 break;
                             case "numbers":
-                                convertToPDF("numbers", file.getPath());
                                 pdfsToMerge.add(new File(file.getPath() + ".pdf"));
+                                convertToPDF("numbers", file.getPath());
+
                                 break;
                             case "jpg":
                             case "jpeg":
                             case "png":
-                                imgToPdf(file.getPath());
                                 pdfsToMerge.add(new File(file.getPath() + ".pdf"));
+                                imgToPdf(file.getPath());
+
                                 break;
                             case "pdf":
                                 pdfsToMerge.add(file);
@@ -153,7 +167,7 @@ public class PDFutil {
         mergerUtility.setDestinationFileName(Paths.get(basePath + finalDestinationFileName + ".pdf").toString());
         try {
             for (File file : pdfsToMerge) {
-                System.out.println("adding file to merger");
+                System.out.println("adding file to merger" + file.getPath());
                 mergerUtility.addSource(file);
             }
             mergerUtility.mergeDocuments(null);
